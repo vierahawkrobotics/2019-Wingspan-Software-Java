@@ -151,8 +151,11 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putBoolean("DB/Led 3",bottomLevel.get());
     //Controls cargo roller
-    if(joystick1.getRawButtonPressed(1)) {
+    if(joystick1.getRawButton(1)) {
       cargoRoller.set(ControlMode.PercentOutput, 0.25);
+    }
+    else if(joystick1.getRawButton(3)) {
+      cargoRoller.set(ControlMode.PercentOutput, -0.25);
     }
     else {
       cargoRoller.set(ControlMode.PercentOutput, 0);
