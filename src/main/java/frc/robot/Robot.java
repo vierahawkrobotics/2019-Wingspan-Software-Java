@@ -5,6 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 package frc.robot;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -45,9 +46,9 @@ public class Robot extends TimedRobot {
   //Creates drive variable
   DifferentialDrive drive1;
   //Declares the elevator limit switch
-  DigitalInput bottomLevel=new DigitalInput(6);
+  DigitalInput bottomLevel=new DigitalInput(5);
   //Declares power variables
-  double slowDrivePower=.4;
+  double slowDrivePower=.6;
   double turboPower=1/slowDrivePower;
   double elevatorPower=.49;
   double elevatorSlowPower=.5;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot {
     leftSide=new SpeedControllerGroup(leftMotor,leftFollower);
     rightSide=new SpeedControllerGroup(rightMotor,rightFollower);
     drive1=new DifferentialDrive(leftSide, rightSide);
+    CameraServer.getInstance().startAutomaticCapture();
   }
   /**
    * This function is called every robot packet, no matter the mode. Use
@@ -126,15 +128,13 @@ public class Robot extends TimedRobot {
     //Sets the robot to drive at the given speeds
     drive1.arcadeDrive(forwardSpeed,rotateSpeed);
     //Sets the elevator speed
-    if(joystick1.getRawAxis(1)>0||(-joystick1.getRawAxis(0)<1&&bottomLevel.get()==true)){
-      if(joystick1.getRawButton(8)==true){
-        Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
-        Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
-      }
-      else{
-        Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
-        Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
-      }
+    if(joystick1.getRawButton(8)==true){
+      Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
+      Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
+    }
+    else{
+      Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
+      Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
     }
     //Controls slide drive
     if(joystick0.getRawButton(11)==true) {
@@ -152,7 +152,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("DB/Led 3",bottomLevel.get());
     //Controls cargo roller
     if(joystick1.getRawButton(1)) {
-      cargoRoller.set(ControlMode.PercentOutput, 0.25);
+      cargoRoller.set(ControlMode.PercentOutput, 0.4);
     }
     else if(joystick1.getRawButton(3)) {
       cargoRoller.set(ControlMode.PercentOutput, -0.25);
