@@ -5,13 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 package frc.robot;
+
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;;
 /*
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
