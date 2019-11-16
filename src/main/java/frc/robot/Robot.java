@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
       forwardSpeed=forwardSpeed*turboPower;
     }
     //Sets the robot to drive at the given speeds
-    drive1.arcadeDrive(forwardSpeed,rotateSpeed);
+    drive1.	curvatureDrive(forwardSpeed,rotateSpeed,true);
     //Sets the elevator speed
     if(joystick1.getRawButton(8)==true){
       Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
