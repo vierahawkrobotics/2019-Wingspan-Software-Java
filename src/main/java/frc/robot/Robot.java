@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;;
+
 /*
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -32,33 +33,24 @@ public class Robot extends TimedRobot {
   //Declares joystick variables
   private Joystick joystick0=new Joystick(0);
   private Joystick joystick1=new Joystick(1);
-  //Declares cargo motors
-  VictorSPX cargoRoller=new VictorSPX(2);
   //Declares elevator motors
-  VictorSPX Elevator1=new VictorSPX(3);
-  VictorSPX Elevator2=new VictorSPX(4);
+  VictorSPX elevator1=new VictorSPX(constants.elevator1Id);
+  VictorSPX elevator2=new VictorSPX(constants.elevator2Id);
   //Declares drive motors
-  Talon leftMotor=new Talon(0);
-  Talon leftFollower=new Talon(1);
-  Talon rightMotor=new Talon(2);
-  Talon rightFollower=new Talon(3);
+  Talon leftMotor=new Talon(constants.leftMotorId);
+  Talon leftFollower=new Talon(constants.leftFollowerId);
+  Talon rightMotor=new Talon(constants.rightMotorId);
+  Talon rightFollower=new Talon(constants.rightFollowerId);
   //Declares slide drive motors
-  Talon slideMain=new Talon(4);
-  Talon slideFollow=new Talon(5);
+  Talon slideMain=new Talon(constants.slideMainId);
+  Talon slideFollow=new Talon(constants.slideFollowerId);
   //Declares controller groups
   SpeedControllerGroup leftSide;
   SpeedControllerGroup rightSide;
   //Creates drive variable
   DifferentialDrive drive1;
   //Declares the elevator limit switch
-  DigitalInput bottomLevel=new DigitalInput(5);
-  //Declares power variables
-  double slowDrivePower=.6;
-  double turboPower=1/slowDrivePower;
-  double elevatorPower=.49;
-  double elevatorSlowPower=.5;
-  double slidePower=.6;
-  double cargoArmPower=.4;
+  DigitalInput bottomLevel=new DigitalInput(constants.bottomLevelId);
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -125,46 +117,36 @@ public class Robot extends TimedRobot {
     //Sets the speed at which the robot is turning from both turning the joystick and the sensitivity slider
     double rotateSpeed=joystick0.getRawAxis(2)*(((joystick0.getRawAxis(3)-1)*-.125)+.5);
     //Sets the forward speed of the robot
-    double forwardSpeed=joystick0.getRawAxis(1)*slowDrivePower*-1;
+    double forwardSpeed=joystick0.getRawAxis(1)*constants.slowDrivePower*-1;
     //If a button is pressed it allows the robot to move faster
     if(joystick0.getRawButton(1)==true){
-      forwardSpeed=forwardSpeed*turboPower;
+      forwardSpeed=forwardSpeed*constants.turboPower;
     }
     //Sets the robot to drive at the given speeds
     drive1.	curvatureDrive(forwardSpeed,rotateSpeed,true);
     //Sets the elevator speed
     if(joystick1.getRawButton(8)==true){
-      Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
-      Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower*elevatorSlowPower);
+      elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*constants.elevatorPower*constants.elevatorSlowPower);
+      elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*constants.elevatorPower*constants.elevatorSlowPower);
     }
     else{
-      Elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
-      Elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*elevatorPower);
+      elevator1.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*constants.elevatorPower);
+      elevator2.set(ControlMode.PercentOutput, joystick1.getRawAxis(1)*constants.elevatorPower);
     }
     //Controls slide drive
     if(joystick0.getRawButton(11)==true) {
-      slideMain.set(slidePower);
-      slideFollow.set(slidePower);
+      slideMain.set(constants.slidePower);
+      slideFollow.set(constants.slidePower);
     }
     else if(joystick0.getRawButton(12)==true) {
-      slideMain.set(-slidePower);
-      slideFollow.set(-slidePower);
+      slideMain.set(-constants.slidePower);
+      slideFollow.set(-constants.slidePower);
     }
     else{
       slideMain.set(0);
       slideFollow.set(0); 
     }
     SmartDashboard.putBoolean("DB/Led 3",bottomLevel.get());
-    //Controls cargo roller
-    if(joystick1.getRawButton(1)) {
-      cargoRoller.set(ControlMode.PercentOutput, 0.4);
-    }
-    else if(joystick1.getRawButton(3)) {
-      cargoRoller.set(ControlMode.PercentOutput, -0.25);
-    }
-    else {
-      cargoRoller.set(ControlMode.PercentOutput, 0);
-    }
   }
   /**
    * This function is called periodically during test mode.
